@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void insertionSort(int arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+void bucketSort(int arr[], int n, int numBuckets) {
+
+    int buckets[numBuckets][n];
+    int bucketSizes[numBuckets];
+    
+    for (int i = 0; i < numBuckets; i++) {
+        bucketSizes[i] = 0;
+    }
+
+    for (int i = 0; i < n; i++) {
+        int bucketIndex = arr[i] * numBuckets / 100; 
+        buckets[bucketIndex][bucketSizes[bucketIndex]] = arr[i];
+        bucketSizes[bucketIndex]++;
+    }
+
+ 
+    for (int i = 0; i < numBuckets; i++) {
+        insertionSort(buckets[i], bucketSizes[i]);
+    }
+
+
+    int index = 0;
+    for (int i = 0; i < numBuckets; i++) {
+        for (int j = 0; j < bucketSizes[i]; j++) {
+            arr[index] = buckets[i][j];
+            index++;
+        }
+    }
+}
+
+int main() {
+    int arr[] = {32, 75, 11, 92, 42, 56, 7};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    int numBuckets = 5;
+    
+    printf("Original array: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+
+    bucketSort(arr, n, numBuckets);
+
+    printf("\nSorted array: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+
+    return 0;
+}
